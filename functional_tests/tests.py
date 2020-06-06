@@ -1,9 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-import unittest
 
-class NewVisitorTest(unittest.TestCase):
+
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -14,7 +15,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Edith has heard about a cool new online to-do sapp.She goes
         #to check out its homepage
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         #She notices the page title and header mention to-do lists
         self.assertIn('To-Do', self.browser.title)
@@ -43,7 +44,7 @@ class NewVisitorTest(unittest.TestCase):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-            any(row.text == '1:Buy peacock feathers' for row in rows)
+            any(row.text == 'Buy peacock feathers' for row in rows)
         )
 
         #There is still a text box inviting her to add another item.She
@@ -60,8 +61,4 @@ class NewVisitorTest(unittest.TestCase):
 
         #Satisfied, she goes back to sleep
         
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
-   
-
 
